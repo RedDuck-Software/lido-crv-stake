@@ -77,7 +77,7 @@ export const getBaseNetworkConfig = (network: Network): NetworkUserConfig => ({
   gasPrice: gasPrices[network],
   blockGasLimit: blockGasLimits[network],
   timeout: timeouts[network],
-  initialBaseFeePerGas: initialBasesFeePerGas[network],
+  initialBaseFeePerGas: 100e7,
 });
 
 export const getNetworkConfig = (network: Network): NetworkUserConfig => ({
