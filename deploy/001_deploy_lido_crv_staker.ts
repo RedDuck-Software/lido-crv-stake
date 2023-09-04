@@ -6,24 +6,24 @@ import { verify } from '../helpers/verify';
 const CONTRACT_NAME = 'LidoCrvStaker';
 
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
-  const { deploy } = hre.deployments;
-  const { deployer } = await hre.getNamedAccounts();
+  // const { deploy } = hre.deployments;
+  // const { deployer } = await hre.getNamedAccounts();
 
-  const result = await deploy(CONTRACT_NAME, {
-    from: deployer,
-    args: [],
-    log: true,
-    autoMine: true,
-  });
-
-  if (result.newlyDeployed && result.transactionHash) {
-    await verify(
-      hre,
-      result.address,
-      result.transactionHash,
-      result.args ?? [],
-    );
-  }
+  // const result = await deploy(CONTRACT_NAME, {
+  //   from: deployer,
+  //   args: [],
+  //   log: true,
+  //   autoMine: true,
+  // }); 
+  // await result.
+  // if (result.newlyDeployed && result.transactionHash) {
+  //   await verify(
+  //     hre,
+  //     result.address,
+  //     result.transactionHash,
+  //     result.args ?? [],
+  //   );
+  // }
 };
 func.tags = [CONTRACT_NAME];
 func.id = CONTRACT_NAME;

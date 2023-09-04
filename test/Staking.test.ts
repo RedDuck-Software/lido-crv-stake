@@ -10,9 +10,9 @@ import { ethers } from 'hardhat';
 
 import {
   LidoCrvStaker__factory,
-  StagerStaker__factory,
+  StaderStaker__factory,
   LidoCrvStaker,
-  StagerStaker,
+  StaderStaker,
   TestERC20__factory,
 } from '../typechain-types';
 
@@ -23,7 +23,7 @@ const STE_CRV_CONTRACT_ADDRESS = '0x06325440D014e39736583c165C2963BA99fAf14E';
 const IMPERSONATE_ADDRESS = '0x73AF3bcf944a6559933396c1577B257e2054D935';
 describe('Staking flow test', function () {
   let lidoCrvStaker: LidoCrvStaker;
-  let stagerStaker: StagerStaker;
+  let stagerStaker: StaderStaker;
   let impersonatedSigner: Signer;
 
   beforeEach(async () => {
@@ -34,7 +34,7 @@ describe('Staking flow test', function () {
       impersonatedSigner,
     ).deploy();
 
-    stagerStaker = await new StagerStaker__factory(impersonatedSigner).deploy();
+    stagerStaker = await new StaderStaker__factory(impersonatedSigner).deploy();
   });
 
   it('Allows to stake at lido and crv', async function () {
@@ -61,14 +61,6 @@ describe('Staking flow test', function () {
         ),
       ),
     ).to.be.greaterThan(0);
-    console.log(
-      'Received steCRV after staking 1ETH:',
-      parseFloat(
-        ethers.utils.formatEther(
-          await contract.balanceOf(await impersonatedSigner.getAddress()),
-        ),
-      ),
-    );
   });
 
   it('Allows to stake at stager', async function () {
@@ -87,11 +79,12 @@ describe('Staking flow test', function () {
       impersonatedSigner,
     );
 
-    console.log(
-      'Received ETHX after staking 1ETH:',
-      parseFloat(ethers.utils.formatEther(
-        await contract.balanceOf(await impersonatedSigner.getAddress()),
-      )),
-    );
+    expect(
+      parseFloat(
+        ethers.utils.formatEther(
+          await contract.balanceOf(await impersonatedSigner.getAddress()),
+        ),
+      ),
+    ).to.be.greaterThan(0);
   });
 });

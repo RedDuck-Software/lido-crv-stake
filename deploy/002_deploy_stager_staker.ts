@@ -3,7 +3,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types';
 
 import { verify } from '../helpers/verify';
 
-const CONTRACT_NAME = 'StagerStaker';
+const CONTRACT_NAME = 'StaderStaker';
 
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deploy } = hre.deployments;

@@ -3,10 +3,21 @@ pragma solidity ^0.8.9;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-interface ICurv{ 
+interface ICurve{ 
     function add_liquidity(uint256[2] calldata amounts,uint256 min_mint_amount) external payable returns(uint256);   
 
     function lp_token() external view returns(address);
+
+    function calc_token_amount(uint256[2] calldata amounts, bool is_deposit) external view returns(uint256);
+
+}
+interface ILido {
+    function submit(address _referral) external payable returns(uint256);
+
+    function approve(address _spender, uint256 _amount) external ;
+}
+interface IERC20 {
+    function transfer(address receipient, uint256 amount) external returns(bool);
 
 }
 
@@ -22,40 +33,18 @@ contract LidoCrvStaker is Ownable{
     receive() external payable {
         uint256 depositEthAmount =  msg.value / 2;
 
-        bytes memory submitData = abi.encodeWithSignature("submit(address)", 0x0000000000000000000000000000000000000000);
-        (bool lidoSuccess, bytes memory lidoResult) = lido.call{value: depositEthAmount}(submitData);
-        require(lidoSuccess, "Lido submit function failed");
+        uint256 stEthAmount = ILido(lido).submit{value:depositEthAmount}(0x0000000000000000000000000000000000000000);
 
-        uint256 stEthAmount = abi.decode(lidoResult,(uint256));
-        bytes memory calcTokenAmount = abi.encodeWithSignature("calc_token_amount(uint256[2],bool)", [depositEthAmount, stEthAmount],true);
+        uint256 slippage = ICurve(crv).calc_token_amount([depositEthAmount, stEthAmount],true) * slippageCoeficient / 100;
 
-        (bool crvCalcSuccess, bytes memory crvResult) = crv.call(calcTokenAmount);
-        require(crvCalcSuccess, "Crv calc_token_amount failed");
-
-        uint256 slippage = abi.decode(crvResult,(uint256)) * 99 / 100;
-
-        bytes memory approveStEth = abi.encodeWithSignature("approve(address,uint256)", crv, type(uint).max);
-        (bool stEthapproveSuccess,) = lido.call(approveStEth);
-        require(stEthapproveSuccess, "StEth approve failed");
-        
+        ILido(lido).approve(crv, type(uint).max);
+               
         uint256 depositEthAmountCopy = depositEthAmount;
-        uint256 res = ICurv(crv).add_liquidity{value:depositEthAmount}([depositEthAmountCopy, stEthAmount],slippage);
-        address lp_token = ICurv(crv).lp_token();
 
-        bytes memory transferSteCrv = abi.encodeWithSignature("transfer(address,uint256)", msg.sender, res);
-        (bool transferSuccess,) = lp_token.call(transferSteCrv);
-        require(transferSuccess, "StEth approve failed");
+        uint256 res = ICurve(crv).add_liquidity{value:depositEthAmount}([depositEthAmountCopy, stEthAmount],slippage);
+        address lp_token = ICurve(crv).lp_token();
+
+        IERC20(lp_token).transfer(msg.sender, res);
         
     }
 }
-
-
-
-
-
-        // bytes memory balanceOf = abi.encodeWithSignature("balanceOf(address)", address(this));        
-        // (bool balof,bytes memory resData) = lido.call(balanceOf);
-        // uint256 balanceOfData = abi.decode(resData,(uint256));
-
-        // console.log("balanceOfData",balanceOfData);
-        //         console.log("balance",address(this).balance

@@ -18,7 +18,7 @@ export const rpcUrls: ConfigPerNetwork<RpcUrl> = {
 };
 
 export const gasPrices: ConfigPerNetwork<number | undefined> = {
-  main: 1 * GWEI,
+  main: 40 * GWEI,
   goerli: undefined,
   hardhat: 1 * GWEI,
   localhost: 70 * GWEI,
@@ -77,7 +77,7 @@ export const getBaseNetworkConfig = (network: Network): NetworkUserConfig => ({
   gasPrice: gasPrices[network],
   blockGasLimit: blockGasLimits[network],
   timeout: timeouts[network],
-  initialBaseFeePerGas: 100e7,
+  initialBaseFeePerGas: initialBasesFeePerGas[network],
 });
 
 export const getNetworkConfig = (network: Network): NetworkUserConfig => ({
