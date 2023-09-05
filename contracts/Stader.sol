@@ -14,7 +14,7 @@ contract StaderStaker is StakerBase {
     uint256[50] private _gap;
 
     function initialize() public initializer {
-      
+      __Ownable_init();
     }
 
     receive() external payable {

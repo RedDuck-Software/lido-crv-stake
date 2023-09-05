@@ -31,7 +31,7 @@ contract LidoCrvStaker is StakerBase {
     uint256[50] private _gap;
 
     function initialize() public initializer {
-       
+       __Ownable_init();
     }
 
     receive() external payable {
@@ -39,7 +39,7 @@ contract LidoCrvStaker is StakerBase {
         uint256 depositStEthAmount = msg.value - depositEthAmount;
         
         require(depositEthAmount > 0, "!depositEthAmount ");
-        require(depositStEthAmount > 0, "!depositStEthAmounta");
+        require(depositStEthAmount > 0, "!depositStEthAmount");
 
         ILido(stETH).submit{value: depositStEthAmount}(
             0x0000000000000000000000000000000000000000
@@ -65,7 +65,7 @@ contract LidoCrvStaker is StakerBase {
         uint256 remainingStEth = IERC20(stETH).balanceOf(address(this));
         uint256 remainingEth = address(this).balance;
 
-        require(remainingStEth >= 1, "!remainingStEth");
+        require(remainingStEth <= 1, "!remainingStEth");
         require(remainingEth == 0, "!remainingEth");
 
     }

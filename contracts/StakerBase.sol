@@ -1,4 +1,4 @@
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 interface IERC20 {
@@ -11,7 +11,7 @@ interface IERC20 {
     function balanceOf(address holder) external view returns (uint256);
 }
 
-contract StakerBase is Ownable, Initializable  {
+contract StakerBase is OwnableUpgradeable  {
     function withdraw(
         address token,
         address to,
@@ -19,7 +19,7 @@ contract StakerBase is Ownable, Initializable  {
     ) external onlyOwner {
         if (token == address(0)) {
             payable(to).transfer(amount);
-        } else {
+        } else {            
             IERC20(token).transfer(to, amount);
         }
     }
