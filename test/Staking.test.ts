@@ -110,7 +110,6 @@ describe('Staking flow test', function () {
   it('Checks received lp tokens', async function () {
     const amountsToDeposit = [10, 21, 5, 1, 0.5, 0.2, 0.1, 0.01];
 
-
     for (let i = 0; i < amountsToDeposit.length; i++) {
       const depositEthAmount = amountsToDeposit[i] / 2;
       const depositStEthAmount = amountsToDeposit[i] / 2;

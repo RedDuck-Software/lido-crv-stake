@@ -13,6 +13,7 @@ const func = async () => {
     'StaderStaker',
     owner
   );
+  console.log('1')
   const staderContract = await hre.upgrades.deployProxy(staderFactory,[]);
   await staderContract.deployed();
   console.log('Stader deployed to:', staderContract.address);

@@ -18,7 +18,7 @@ export const rpcUrls: ConfigPerNetwork<RpcUrl> = {
 };
 
 export const gasPrices: ConfigPerNetwork<number | undefined> = {
-  main: 0,
+  main: 30 * GWEI,
   goerli: undefined,
   hardhat: 1 * GWEI,
   localhost: 70 * GWEI,
@@ -60,7 +60,7 @@ export const blockGasLimits: ConfigPerNetwork<number | undefined> = {
 };
 
 export const initialBasesFeePerGas: ConfigPerNetwork<number | undefined> = {
-  main: 0,
+  main: 30 * 1e9,
   goerli: undefined,
   hardhat: 0,
   localhost: undefined,
