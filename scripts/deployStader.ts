@@ -11,9 +11,9 @@ const func = async () => {
 
   const staderFactory = await hre.ethers.getContractFactory(
     'StaderStaker',
-    owner as any
+    owner
   );
-  const staderContract = await upgrades.deployProxy(staderFactory, []);
+  const staderContract = await hre.upgrades.deployProxy(staderFactory,[]);
   await staderContract.deployed();
   console.log('Stader deployed to:', staderContract.address);
 };
